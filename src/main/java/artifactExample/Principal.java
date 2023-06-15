@@ -58,10 +58,12 @@ public class Principal {
 //		
 //		repeatWord("La luna de la tierra es pequeña en comparación con la luna de Jupiter y la luna de urano tierra tierra tierra tierra tierra");
 		
-		//CLIENTES APIS
-		Gson gson = new Gson();
-		PokemonDTO pokemonDTO = gson.fromJson(requestPetition(URL, "Charizard"), PokemonDTO.class);
 		
+		//Api Client with JWT
+		String token = createJwt("carlos", "ortiz");
+		//token = token.concat("3");
+		Gson gson = new Gson();
+		PokemonDTO pokemonDTO = gson.fromJson(requestPetition(token, "carlos", URL, "Charizard"), PokemonDTO.class);
 		if(pokemonDTO != null) {
 			logger.info("Name: " + pokemonDTO.getName());
 			logger.info("Number: " + pokemonDTO.getOrder());
@@ -69,28 +71,6 @@ public class Principal {
 			logger.info("Habilidad 1: " + pokemonDTO.getAbilities().get(0).getAbility().getName());
 			logger.info("Habilidad 2: " + pokemonDTO.getAbilities().get(1).getAbility().getName());
 		}
-
-		
-		//JWT
-		String token = createJwt("carlos", "ortiz");
-		logger.info(validateTokenJwt(token, "carlos"));		
-	}
-	
-	public static String requestPetition(String urlBase, String pokemon) {
-		String url = urlBase.concat(pokemon.toLowerCase().trim());
-		String responseText = "";
-	    try {
-			OkHttpClient client = new OkHttpClient();
-		    Request request = new Request.Builder()
-		            .url(url)
-		            .build();
-	    	Response response = client.newCall(request).execute();
-	    	responseText = response.body().string();
-	    	logger.info("Respuesta API: " + responseText);
-		} catch (Exception e) {
-			logger.error("Error en la llamada a la api ", e);
-		}
-	     return responseText;
 	}
 	
 	private static String createJwt(String user, String password) {
@@ -112,22 +92,45 @@ public class Principal {
 	private static boolean validateUserAndPass(String user, String password) {
 		return user.equalsIgnoreCase("carlos") && password.equalsIgnoreCase("ortiz");
 	}
-
+		
+	public static String requestPetition(String token, String user, String urlBase, String pokemon) {
+		String url = urlBase.concat(pokemon.toLowerCase().trim());
+		String responseText = "";
+		try {
+			if(validateTokenJwt(token, user)) {
+				OkHttpClient client = new OkHttpClient();
+				Request request = new Request.Builder()
+				        	.url(url)
+				            .build();
+			    Response response = client.newCall(request).execute();
+			    responseText = response.body().string();
+			    logger.info("Respuesta API: " + responseText);
+			}
+		} catch (Exception e) {
+				logger.error("Error en la llamada a la api ", e);
+		}
+	     return responseText;
+	}
+	
 	private static boolean validateTokenJwt(String token, String user) {
+		logger.info("Token recibido para validar: " + token);
 		DecodedJWT decodedJWT = null;
 		if(token != null) {
 			try {
 			    Algorithm algorithm = Algorithm.HMAC256("secret_key");
 			    JWTVerifier verifier = JWT.require(algorithm)
 			        .withIssuer(user)
-			        .build();
-			        
+			        .build();	        
 			    decodedJWT = verifier.verify(token);
+			    return token.equals(decodedJWT.getToken());
 			} catch (JWTVerificationException e) {
 				logger.error("Invalid signature/claims", e);
-			}	
+				return false;
+			}
+		} else {
+			logger.error("Token Nulo , no se realizará request");
+			return false;
 		}
-		return token.equals(decodedJWT.getToken());
 	}
 
 	public static void repeatWord(String word) {
