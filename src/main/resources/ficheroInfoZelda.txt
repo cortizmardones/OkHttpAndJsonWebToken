@@ -1,0 +1,24 @@
+Título Videojuego
+Año Lanzamiento
+Consola Lanzamiento
+The Legend of Zelda: Ocarine of time
+1998
+Nintendo 64
+The Legend of Zelda: Majora's Mask
+2000
+Nintendo 64
+The Legend of Zelda: The Wind Waker
+2003
+Nintendo GameCube
+The Legend of Zelda: Twilight Princess
+2006
+Nintendo GameCube - Nintendo Wii
+The Legend of Zelda - Skyward Sword
+2011
+Nintendo Wii
+The Legend of Zelda - Breath of the wild
+2017
+Nintendo Wii U - Nintendo Switch
+The Legend of Zelda - Tears of the kingdom
+2023
+Nintendo Switch
