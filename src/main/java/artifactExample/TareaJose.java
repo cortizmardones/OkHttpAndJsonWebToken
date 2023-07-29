@@ -81,6 +81,8 @@ public class TareaJose {
 				}
 			}
 		}
+		
+		scanner.close();
 
 	}
 }
