@@ -12,9 +12,10 @@ import com.google.gson.Gson;
 
 import Data.JwtDTO;
 
-public class RequestRest {
+public class RequestRestHttpClient {
 	
-	private static Logger logger = Logger.getLogger(RequestRest.class);
+	private static Logger logger = Logger.getLogger(RequestRestHttpClient.class);
+	
 	private static final String USER = "carlos";
 	private static final String PASSWORD = "ortiz";
 
