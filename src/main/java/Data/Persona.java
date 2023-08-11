@@ -1,4 +1,4 @@
-package artifactExample;
+package Data;
 
 public class Persona {
 

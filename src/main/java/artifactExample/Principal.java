@@ -103,12 +103,8 @@ public class Principal {
 		logger.info(header);
 		logger.info(payload);
 		
-
-
 	}
 	
-
-
 	public static String requestPetition2(String url) {
 		String responseText = "";
 		try {
@@ -217,12 +213,4 @@ public class Principal {
 		return result;
 	}
 
-
-
-
-
-
-	
-
-	
 }

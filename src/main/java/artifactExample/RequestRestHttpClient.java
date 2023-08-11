@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Base64;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,13 @@ public class RequestRestHttpClient {
 	private static final String PASSWORD = "ortiz";
 
 	public static void main(String[] args) {
+		
+		Optional<HttpResponse<String>> resultBasicAutentication = apiGetAllRazas();
+		if(resultBasicAutentication.isPresent()) {
+			HttpResponse<String> resultado = resultBasicAutentication.get();
+			logger.info(resultado.statusCode());
+			logger.info(resultado.body());
+		}
 		
 		Optional<HttpResponse<String>> result = apiGetToken(USER, PASSWORD);
 		
@@ -132,6 +140,39 @@ public class RequestRestHttpClient {
 			logger.error("Error en la llamada", e);
 		}
 		return Optional.empty();
+	}
+	
+	// PETICIÓN CON BASIC AUTENTICATION
+	public static Optional<HttpResponse<String>> apiGetAllRazas() {
+		String urlComplete = "http://localhost:8080/raza/listar";
+		logger.info("Inicio petición :  '"+ urlComplete +"'");
+		try {
+						
+			HttpClient cliente = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(urlComplete))
+					.header("Authorization", getBasicAuthenticationHeader("ADMIN", "to_be_encoded"))
+					.GET()
+					.build();
+	        	
+			HttpResponse<String> response = cliente.send(request, HttpResponse.BodyHandlers.ofString());
+			if(response.statusCode() != 200) {
+				logger.info("Resultado EstatusCode: " + response.statusCode());
+				logger.info("Resultado petición : " + urlComplete + " = " + response.body() + "\n");
+			} else {
+				logger.info("Resultado EstatusCode: " + response.statusCode());
+				logger.info("Resultado petición : " + urlComplete + " = " + response.body() + "\n");
+		        return Optional.of(response);
+			}
+		} catch (Exception e) {
+			logger.error("Error en la llamada: ", e);
+		}
+		return Optional.empty();
+	} 
+	
+	private static final String getBasicAuthenticationHeader(String username, String password) {
+	    String valueToEncode = username + ":" + password;
+	    return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
 	}
 
 }
