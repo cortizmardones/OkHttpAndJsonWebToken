@@ -19,14 +19,19 @@ public class RequestRestHttpClient {
 	
 	private static final String USER = "carlos";
 	private static final String PASSWORD = "ortiz";
+	
+	//BASIC AUTENTICATION
+	private static final String USER_SPRING_SECURITY = "admin";
+	private static final String PASSWORD_SPRING_SECURITY = "to_be_encoded";
 
 	public static void main(String[] args) {
 		
 		Optional<HttpResponse<String>> resultBasicAutentication = apiGetAllRazas();
 		if(resultBasicAutentication.isPresent()) {
 			HttpResponse<String> resultado = resultBasicAutentication.get();
-			logger.info(resultado.statusCode());
-			logger.info(resultado.body());
+			logger.info("Status Code: " + resultado.statusCode());
+			logger.info("Bosy: " + resultado.body());
+			logger.info("");
 		}
 		
 		Optional<HttpResponse<String>> result = apiGetToken(USER, PASSWORD);
@@ -47,12 +52,14 @@ public class RequestRestHttpClient {
 		
 		String personList = optPersonList.get().body();
 		logger.info(personList);
+		logger.info("");
 		
 		//PETICION A API CON CUERPO
 		apiCrearPersonas(jwt.getJwtoken(), USER);
 
 	}
 	
+	// LLAMADA NORMAL
 	public static Optional<HttpResponse<String>> apiGetToken(String user, String password) {
 		String urlComplete = "http://localhost:8080/token/getToken/".concat(user.toLowerCase().trim()).concat("/").concat(password.toLowerCase().trim());
 		logger.info("Inicio petición :  '"+ urlComplete +"'");
@@ -78,6 +85,7 @@ public class RequestRestHttpClient {
 		return Optional.empty();
 	} 
 	
+	// LLAMADA CON HEADER
 	public static Optional<HttpResponse<String>> apiGetListarPersonas(String token, String user) {
 		String urlComplete = "http://localhost:8080/persona/listar";
 		logger.info("Inicio petición :  '"+ urlComplete +"'");
@@ -105,6 +113,7 @@ public class RequestRestHttpClient {
 		return Optional.empty();
 	} 
 	
+	// LLAMADA CON CUERPO JSON
 	public static Optional<HttpResponse<String>> apiCrearPersonas(String token, String user) {
 		String urlComplete = "http://localhost:8080/persona/create";
 		logger.info("Inicio petición :  '"+ urlComplete +"'");
@@ -112,10 +121,10 @@ public class RequestRestHttpClient {
 			
 	        String json = new StringBuilder()
 	                .append("{")
-	                .append("\"nombre\":\"Carlos\",")
-	                .append("\"apellido\":\"Ortiz desde java standalone\",")
-	                .append("\"email\":\"email desde java standalone\",")
-	                .append("\"telefono\":\"pruebaClienteRest\"")
+	                .append("\"apellido\":\"Prueba Ortiz\",")
+	                .append("\"email\":\"Prueba cortizmardones@gmail.com\",")
+	                .append("\"nombre\":\"Prueba Carlos\",")
+	                .append("\"telefono\":\"Prueba 958586705\"")
 	                .append("}").toString();
 	        
 			HttpClient cliente = HttpClient.newHttpClient();
@@ -151,7 +160,7 @@ public class RequestRestHttpClient {
 			HttpClient cliente = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(URI.create(urlComplete))
-					.header("Authorization", getBasicAuthenticationHeader("ADMIN", "to_be_encoded"))
+					.header("Authorization", getBasicAuthenticationHeader(USER_SPRING_SECURITY, PASSWORD_SPRING_SECURITY))
 					.GET()
 					.build();
 	        	
