@@ -1,4 +1,4 @@
-package artifactExample;
+package artifactExample.callRest;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,9 +13,9 @@ import com.google.gson.Gson;
 
 import Data.JwtDTO;
 
-public class RequestRestHttpClient {
+public class HttpClients {
 	
-	private static Logger logger = Logger.getLogger(RequestRestHttpClient.class);
+	private static Logger logger = Logger.getLogger(HttpClients.class);
 	
 	private static final String USER = "carlos";
 	private static final String PASSWORD = "ortiz";

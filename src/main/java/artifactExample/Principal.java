@@ -12,23 +12,14 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import Data.Data;
-
 public class Principal {
 	
 	private static Logger logger = Logger.getLogger(Principal.class);
 	
-	private static final String URL2 = "https://jsonplaceholder.typicode.com/posts";
-	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
 		//KATAS
-		logger.info(checkWordPalindrom("reconocer"));
+
 		logger.info(multiplyWithoutSymbol(25, 3));
 		int[] array = {3, 1, 4, 25, 73, 84, 914, 45712};
 		logger.info(getBiggestNumber(array));
@@ -41,17 +32,7 @@ public class Principal {
 		logger.info(cleanArray(arrayList));
 		
 		repeatWord("La luna de la tierra es pequeña en comparación con la luna de Jupiter y la luna de urano tierra tierra tierra tierra tierra");
-		
-		Gson gson2 = new Gson();
-		Data[] rootData = gson2.fromJson(requestPetition2(URL2), Data[].class);
-		
-		for(Data iterator : rootData) {
-			System.out.println(iterator.getUserId());
-			System.out.println(iterator.getId());
-			System.out.println(iterator.getTitle());
-			System.out.println(iterator.getBody());
-		}
-		
+				
 		List<String> gameList = Arrays.asList("Zelda", "Mario", "Donkey", "StarWars", "Final Fantasy", "One Piece");
 		List<String> gameList2 = gameList.stream()
 											.filter(e -> e.endsWith("ce"))
@@ -105,21 +86,7 @@ public class Principal {
 		
 	}
 	
-	public static String requestPetition2(String url) {
-		String responseText = "";
-		try {
-			OkHttpClient client = new OkHttpClient();
-			Request request = new Request.Builder()
-				        .url(url)
-				        .build();
-			Response response = client.newCall(request).execute();
-			responseText = response.body().string();
-			logger.info("Respuesta API: " + responseText);
-		} catch (Exception e) {
-				logger.error("Error en la llamada a la api ", e);
-		}
-	     return responseText;
-	}
+
 					
 	public static void repeatWord(String word) {
 		
@@ -172,25 +139,7 @@ public class Principal {
 		array.removeAll(elementForDelete);
 		return array.toString();
 	}
-	
-	public static String checkWordPalindrom(String word) {
 		
-		// Forma fácil
-		//String newWord = new StringBuilder(word).reverse().toString();
-		
-		String[] arrayOriginal = word.toLowerCase().split("");
-		String[] arrayComparator = new String[word.length()];
-		int j = 0;
-		for(int i = arrayOriginal.length -1; i >= 0; i--) {
-			arrayComparator[j] = arrayOriginal[i];
-			j++;
-		}
-		if(Arrays.toString(arrayOriginal).equalsIgnoreCase(Arrays.toString(arrayComparator))) {
-			return "La palabra: '" + word + "', SI es un palíndromo";
-		}
-		return "La palabra: '" + word + "', NO es un palíndromo";
-	}
-	
 	public static int getBiggestNumber(int[] array) {
 		int mayor = 0;
 		for(int i = 0; i < array.length -1 ;i++) {

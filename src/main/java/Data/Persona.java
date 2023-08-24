@@ -39,5 +39,9 @@ public class Persona {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
+	
+	public void metodoPruebaReflection(String nombre) {
+		System.out.println("Hola : " + nombre);
+	}
 
 }
